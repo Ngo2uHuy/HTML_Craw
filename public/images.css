@@ -1,0 +1,42 @@
+/* Riêng trang Ảnh & icon; style chung nằm ở common.css. */
+.opts { margin-top: 12px; color: var(--muted); }
+.opts summary { cursor: pointer; }
+.opts .row { margin-top: 10px; color: var(--text); }
+.row + .row { margin-top: 12px; }
+.row label { display: inline-flex; align-items: center; gap: 6px; }
+.row input[type=number] { width: 90px; }
+#search { flex: 1; min-width: 160px; }
+.seg { display: inline-flex; }
+.seg button { border-radius: 0; margin-left: -1px; font-weight: 500; }
+.seg button:first-child { border-radius: 8px 0 0 8px; margin-left: 0; }
+.seg button:last-child { border-radius: 0 8px 8px 0; }
+.seg button.on { background: var(--accent); color: var(--accent-text); border-color: var(--accent); position: relative; }
+#formats { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+#formats label { gap: 4px; text-transform: uppercase; font-size: 12px; }
+.toolbar #summary { flex: 1; color: var(--muted); }
+#filters { position: sticky; top: 0; z-index: 2; }
+#progress { margin-top: 12px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+#progress span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar { flex: 0 0 220px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+#error { min-height: 0; }
+#grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: pointer; position: relative; }
+.card.sel { border-color: var(--accent); background: var(--sel); }
+.card .thumb {
+  height: 140px; display: flex; align-items: center; justify-content: center;
+  background: repeating-conic-gradient(var(--checker) 0 25%, transparent 0 50%) 0 0 / 16px 16px;
+}
+.card img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.card .meta { padding: 6px 8px; font-size: 12px; }
+.card .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.card .info { color: var(--muted); display: flex; justify-content: space-between; gap: 4px; }
+.card input[type=checkbox] { position: absolute; top: 6px; left: 6px; width: 18px; height: 18px; }
+.card .badges { position: absolute; top: 6px; right: 6px; display: flex; gap: 4px; }
+.badge { font-size: 10px; padding: 1px 6px; border-radius: 10px; background: rgba(0,0,0,.6); color: #fff; }
+#grid .empty { grid-column: 1 / -1; text-align: center; padding: 40px 0; }
+@media (max-width: 600px) {
+  #grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+  .card .thumb { height: 110px; }
+  .bar { flex-basis: 120px; }
+}

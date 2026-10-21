@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrawCode – Thư viện website</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .toolbar .summary { flex: 1; min-width: 200px; color: var(--muted); }
+  .toolbar .summary b { color: var(--text); }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+  .filters input[type=search] { flex: 1; min-width: 180px; }
+  .chip { padding: 5px 12px; border-radius: 999px; font-weight: 500; font-size: 14px; }
+  .chip.on { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  .chip small { opacity: .7; margin-left: 4px; }
+  .group { margin: 28px 0 0; }
+  .group h2 { display: flex; align-items: baseline; gap: 8px; font-size: 18px; }
+  .group h2 small { color: var(--muted); font-weight: 400; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .site { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .thumb iframe { position: absolute; top: 0; left: 0; width: 1280px; height: 800px; border: 0; transform: scale(var(--k, .25)); transform-origin: 0 0; pointer-events: none; background: #fff; }
+  .thumb a.cover { position: absolute; inset: 0; }
+  .thumb .ph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 14px; text-align: center; padding: 12px; }
+  .body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .body .name { font-weight: 600; }
+  .body .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); }
+  .tag { padding: 1px 8px; border-radius: 999px; background: var(--accent-weak); color: var(--accent); font-size: 12px; font-weight: 500; }
+  .st { font-size: 13px; font-weight: 600; }
+  .st.done { color: var(--ok); } .st.running, .st.queued { color: var(--accent); }
+  .st.error { color: var(--err); } .st.none { color: var(--muted); }
+  .body .actions { display: flex; gap: 6px; margin-top: auto; padding-top: 6px; flex-wrap: wrap; }
+  .empty { padding: 40px 0; text-align: center; }
+</style>
+</head>
+<body>
+<main class="wide">
+  <h1>CrawCode</h1>
+  <p class="sub">Clone giao diện website hoặc chuyển thiết kế Figma thành HTML + CSS + JS.</p>
+
+  <nav class="apptabs">
+    <a class="apptab" href="/">Clone website</a>
+    <a class="apptab" href="/#figma">Từ Figma</a>
+    <a class="apptab" href="images.html">Ảnh &amp; icon</a>
+    <a class="apptab" href="gallery.html" aria-current="page">Thư viện</a>
+  </nav>
+
+  <section class="panel">
+    <div class="toolbar">
+      <span class="summary" id="summary">Đang tải…</span>
+      <label class="muted">Tối đa <input type="number" id="maxPages" min="1" max="10" value="10" style="width:72px"> trang/site</label>
+      <button class="primary" id="cloneAll" type="button">Clone các site chưa có</button>
+      <button class="danger" id="stopAll" type="button" hidden>Dừng hàng đợi</button>
+    </div>
+    <div class="filters">
+      <input type="search" id="search" placeholder="Tìm theo tên, lĩnh vực, tên miền">
+      <label class="muted"><input type="checkbox" id="showPreview" checked> Hiện preview</label>
+    </div>
+    <div class="filters" id="chips"></div>
+    <div class="err" id="err"></div>
+  </section>
+
+  <div id="groups"></div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const STATUS = { done: 'Đã clone', running: 'Đang clone…', queued: 'Đang chờ', error: 'Lỗi', none: 'Chưa clone' };
+const store = {
+  get: k => { try { return localStorage.getItem(k); } catch { return null; } },
+  set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
+};
+
+let VIEW = `${location.protocol}//${location.hostname}:${+location.port + 1}`;
+let data = { items: [] };
+let topic = store.get('crawcode.gallery.topic') || 'all';
+let timer = null;
+$('showPreview').checked = store.get('crawcode.gallery.preview') !== '0';
+
+async function load() {
+  try {
+    data = await (await fetch('/api/catalog')).json();
+    $('err').textContent = '';
+  } catch (e) { $('err').textContent = 'Không tải được danh mục: ' + e.message; }
+  render();
+  clearTimeout(timer);
+  if (data.items.some(i => i.status === 'running' || i.status === 'queued')) timer = setTimeout(load, 3000);
+}
+
+function render() {
+  const items = data.items;
+  const count = s => items.filter(i => i.status === s).length;
+  const busy = count('running') + count('queued');
+  $('summary').innerHTML = `<b>${count('done')}</b>/${items.length} site đã clone · ${new Set(items.map(i => i.field)).size} lĩnh vực`
+    + (busy ? ` · đang chạy <b>${count('running')}</b>, chờ <b>${count('queued')}</b>` : '')
+    + (count('error') ? ` · <span style="color:var(--err)">${count('error')} lỗi</span>` : '');
+  $('stopAll').hidden = !busy;
+  $('cloneAll').disabled = !items.some(i => i.status === 'none' || i.status === 'error');
+
+  const groups = [...new Set(items.map(i => i.group))];
+  if (topic !== 'all' && !groups.includes(topic)) topic = 'all';
+  $('chips').innerHTML = [['all', 'Tất cả', items.length], ...groups.map(g => [g, g, items.filter(i => i.group === g).length])]
+    .map(([v, label, n]) => `<button class="chip${v === topic ? ' on' : ''}" data-topic="${esc(v)}">${esc(label)}<small>${n}</small></button>`).join('');
+
+  const q = $('search').value.trim().toLowerCase();
+  const match = i => (topic === 'all' || i.group === topic) && (!q || `${i.name} ${i.field} ${i.site}`.toLowerCase().includes(q));
+  const html = groups.map(g => {
+    const list = items.filter(i => i.group === g && match(i));
+    if (!list.length) return '';
+    return `<section class="group"><h2>${esc(g)} <small>${list.length} site</small></h2><div class="grid">${list.map(card).join('')}</div></section>`;
+  }).join('');
+  // Giữ nguyên iframe đã tải: chỉ vẽ lại khi nội dung thay đổi.
+  if ($('groups').dataset.html !== html) {
+    $('groups').dataset.html = html;
+    $('groups').innerHTML = html || '<p class="empty muted">Không có site nào khớp.</p>';
+    fitThumbs();
+  }
+}
+
+function card(i) {
+  const m = i.meta || {};
+  const viewUrl = m.entry ? `${VIEW}/${encodeURIComponent(i.site)}/${m.entry}` : '';
+  const ready = i.status === 'done';
+  const detail = i.status === 'running' && i.stats ? ` · ${i.stats.pages} trang, ${i.stats.assets} file`
+    : ready && m.pages != null ? ` · ${m.pages} trang, ${m.assets} file` : '';
+  const thumb = ready && $('showPreview').checked
+    ? `<iframe src="${viewUrl}" loading="lazy" sandbox="allow-scripts allow-same-origin" tabindex="-1" title="${esc(i.name)}"></iframe><a class="cover" href="${viewUrl}" target="_blank" aria-label="Mở ${esc(i.name)}"></a>`
+    : `<div class="ph">${ready ? `<a href="${viewUrl}" target="_blank">Mở bản clone</a>` : i.status === 'error' ? esc(i.error) : STATUS[i.status]}</div>`;
+  return `<article class="site">
+    <div class="thumb">${thumb}</div>
+    <div class="body">
+      <div class="name">${esc(i.name)}</div>
+      <div class="meta"><span class="tag">${esc(i.field)}</span><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.site)}</a></div>
+      <div class="st ${i.status}">${STATUS[i.status]}${detail}</div>
+      <div class="actions">
+        ${ready ? `<a class="btn sm primary" href="${viewUrl}" target="_blank">Xem</a><a class="btn sm" href="/download/${encodeURIComponent(i.site)}.zip">ZIP</a>` : ''}
+        ${i.status === 'running' || i.status === 'queued' ? '' : `<button class="sm" data-clone="${esc(i.url)}">${ready ? 'Clone lại' : 'Clone'}</button>`}
+      </div>
+    </div>
+  </article>`;
+}
+
+// Thu nhỏ iframe 1280px cho vừa khung thẻ.
+const ro = new ResizeObserver(entries => {
+  for (const e of entries) e.target.style.setProperty('--k', e.contentRect.width / 1280);
+});
+function fitThumbs() { document.querySelectorAll('.thumb').forEach(t => ro.observe(t)); }
+
+async function batch(body) {
+  $('err').textContent = '';
+  const res = await fetch('/api/batch', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ maxPages: +$('maxPages').value, ...body }) });
+  const r = await res.json();
+  if (!res.ok) $('err').textContent = r.error || res.statusText;
+  load();
+}
+
+$('cloneAll').addEventListener('click', () => batch({}));
+$('stopAll').addEventListener('click', async () => { await fetch('/api/batch/cancel', { method: 'POST' }); load(); });
+$('groups').addEventListener('click', e => {
+  const b = e.target.closest('[data-clone]');
+  if (b) batch({ urls: [b.dataset.clone], force: true });
+});
+$('chips').addEventListener('click', e => {
+  const b = e.target.closest('[data-topic]');
+  if (!b) return;
+  topic = b.dataset.topic;
+  store.set('crawcode.gallery.topic', topic);
+  render();
+});
+$('search').addEventListener('input', render);
+$('showPreview').addEventListener('change', () => {
+  store.set('crawcode.gallery.preview', $('showPreview').checked ? '1' : '0');
+  render();
+});
+
+fetch('/api/config').then(r => r.json()).then(c => { VIEW = c.viewBase || `${location.protocol}//${location.hostname}:${c.viewPort}`; }).finally(load);
+</script>
+</body>
+</html>

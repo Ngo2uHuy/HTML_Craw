@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Nguyễn Nguyễn – Web Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f1; --panel: #ffffff; --text: #16191d; --muted: #5d636b; --line: #d9dcd6; --line-strong: #b9bdb5;
+    --accent: #b0582a; --accent-weak: #f4e6dc; --grid: rgba(22, 25, 29, .045);
+    --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121417; --panel: #1a1d21; --text: #e8eae6; --muted: #959ba3; --line: #2a2e34; --line-strong: #3b4048;
+      --accent: #e08a55; --accent-weak: #33241b; --grid: rgba(232, 234, 230, .04);
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 "IBM Plex Sans", system-ui, "Segoe UI", sans-serif;
+    -webkit-user-select: none; user-select: none;
+  }
+  img { -webkit-user-drag: none; }
+  @media print { html { display: none !important; } }
+  a { color: inherit; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+  /* top bar */
+  header.top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; align-items: center; gap: 16px; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; text-decoration: none; }
+  .brand i { font-style: normal; font-family: var(--mono); font-size: 12px; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--text); }
+  nav { margin-left: auto; display: flex; gap: 22px; }
+  nav a { text-decoration: none; font-size: 14px; color: var(--muted); }
+  nav a:hover { color: var(--text); }
+
+  /* hero */
+  .hero { border-bottom: 1px solid var(--line); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 32px 32px; }
+  .hero .wrap { display: grid; grid-template-columns: 1.25fr 1fr; gap: 56px; align-items: center; padding-top: 72px; padding-bottom: 72px; }
+  .hero h1 { font-size: clamp(40px, 6vw, 68px); line-height: 1.05; letter-spacing: -.02em; margin: 14px 0 18px; font-weight: 700; }
+  .hero .lead { font-size: 20px; line-height: 1.5; margin: 0 0 14px; max-width: 34em; }
+  .hero .lead b { color: var(--accent); font-weight: 600; }
+  .hero p.desc { color: var(--muted); margin: 0 0 28px; max-width: 36em; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font: 500 15px/1 inherit; font-family: inherit; text-decoration: none; border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--text); }
+  .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .figure { position: relative; padding: 14px; border: 1px solid var(--line-strong); background: var(--panel); }
+  .figure::before, .figure::after { content: ""; position: absolute; width: 14px; height: 14px; border: 2px solid var(--accent); }
+  .figure::before { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+  .figure::after { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+  .figure img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; pointer-events: none; }
+  .figure figcaption { display: flex; justify-content: space-between; margin-top: 10px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); margin-top: 40px; }
+  .stats div { padding: 16px 0 0; }
+  .stats b { display: block; font-size: 30px; font-weight: 600; line-height: 1.1; }
+
+  /* sections */
+  section.block { padding: 88px 0; border-bottom: 1px solid var(--line); }
+  .head { display: grid; grid-template-columns: 220px 1fr; gap: 32px; margin-bottom: 40px; }
+  .head h2 { font-size: clamp(26px, 3.4vw, 38px); line-height: 1.15; letter-spacing: -.01em; margin: 0 0 10px; }
+  .head p { color: var(--muted); margin: 0; max-width: 46em; }
+
+  .spec { border-top: 1px solid var(--text); }
+  .spec .row { display: grid; grid-template-columns: 220px 1fr 1.2fr; gap: 32px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+  .spec h3 { font-size: 19px; margin: 0; font-weight: 600; }
+  .spec p { margin: 0; color: var(--muted); }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--line); background: var(--panel); }
+  .steps div { padding: 26px 22px; border-right: 1px solid var(--line); }
+  .steps div:last-child { border-right: 0; }
+  .steps h3 { font-size: 17px; margin: 14px 0 8px; }
+  .steps p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* work */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chip { font: 500 13px/1 var(--mono); letter-spacing: .02em; padding: 9px 14px; border: 1px solid var(--line-strong); background: transparent; color: var(--text); cursor: pointer; }
+  .chip small { color: var(--muted); margin-left: 6px; }
+  .chip.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .chip.on small { color: inherit; opacity: .7; }
+  .note { margin: 0 0 28px; color: var(--muted); font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .card { background: var(--panel); border: 1px solid var(--line); cursor: pointer; text-align: left; padding: 0; font: inherit; color: inherit; display: flex; flex-direction: column; transition: border-color .15s, transform .15s; }
+  .card:hover, .card:focus-visible { border-color: var(--accent); transform: translateY(-2px); outline: none; }
+  .thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .thumb iframe { position: absolute; top: 0; left: 0; width: 1280px; height: 800px; border: 0; transform-origin: 0 0; transform: scale(var(--s, .25)); pointer-events: none; }
+  .meta { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 4px; }
+  .meta .t { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .meta h3 { margin: 0; font-size: 17px; font-weight: 600; }
+  .tag { font: 500 11px/1 var(--mono); color: var(--accent); background: var(--accent-weak); padding: 4px 6px; white-space: nowrap; }
+  .empty { padding: 40px; text-align: center; color: var(--muted); border: 1px dashed var(--line-strong); }
+
+  /* viewer */
+  .viewer { position: fixed; inset: 0; z-index: 50; background: rgba(10, 12, 14, .82); display: flex; flex-direction: column; padding: 16px; }
+  .viewer .bar { display: flex; align-items: center; gap: 14px; background: var(--panel); border: 1px solid var(--line); border-bottom: 0; padding: 10px 14px; }
+  .viewer .bar b { font-weight: 600; }
+  .viewer .bar .x { margin-left: auto; }
+  .viewer iframe { flex: 1; width: 100%; border: 1px solid var(--line); background: #fff; }
+
+  /* contact */
+  .contact { display: grid; grid-template-columns: 220px 1fr; gap: 32px; }
+  .contact h2 { font-size: clamp(30px, 4vw, 46px); line-height: 1.1; margin: 0 0 16px; letter-spacing: -.01em; }
+  .contact dl { display: grid; grid-template-columns: 140px 1fr; margin: 24px 0 0; border-top: 1px solid var(--line); }
+  .contact dt, .contact dd { margin: 0; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .contact dd { font-weight: 500; }
+  footer { padding: 28px 0 40px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .hero .wrap { grid-template-columns: 1fr; gap: 40px; padding-top: 48px; padding-bottom: 48px; }
+    .figure { max-width: 420px; }
+    .head, .contact { grid-template-columns: 1fr; gap: 8px; }
+    .spec .row { grid-template-columns: 1fr; gap: 8px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .steps div:nth-child(2) { border-right: 0; }
+    .steps div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    section.block { padding: 64px 0; }
+  }
+  @media (max-width: 600px) {
+    .wrap { padding: 0 16px; }
+    nav { display: none; }
+    .steps { grid-template-columns: 1fr; }
+    .steps div { border-right: 0; border-bottom: 1px solid var(--line); }
+    .grid { grid-template-columns: 1fr; }
+    .contact dl { grid-template-columns: 100px 1fr; }
+    .viewer { padding: 0; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><i>NN</i> Nguyễn Nguyễn</a>
+    <nav>
+      <a href="#fit">Năng lực</a>
+      <a href="#process">Quy trình</a>
+      <a href="#work">Website</a>
+      <a href="#contact">Liên hệ</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="mono">Portfolio · Web / UI Designer · Industrial B2B</div>
+      <h1>Nguyễn Nguyễn</h1>
+      <p class="lead">Thiết kế website cho doanh nghiệp <b>công nghiệp, điện tử &amp; công nghệ</b>: hiện đại, kỹ thuật, ảnh thật.</p>
+      <p class="desc">Tập trung vào thứ khách B2B cần khi tìm nhà cung cấp: danh mục sản phẩm rõ ràng, thông số kỹ thuật dễ tra, tài liệu (TDS/SDS) dễ tải và đường dẫn tới báo giá ngắn nhất.</p>
+      <div class="cta">
+        <a class="btn" href="#work">Xem website đã dựng →</a>
+        <a class="btn ghost" href="#contact">Liên hệ</a>
+      </div>
+      <div class="stats">
+        <div><b id="statSites">–</b><span class="mono">Website</span></div>
+        <div><b id="statPages">–</b><span class="mono">Trang giao diện</span></div>
+        <div><b id="statGroups">–</b><span class="mono">Lĩnh vực</span></div>
+      </div>
+    </div>
+    <figure class="figure">
+      <img src="portfolio-avatar.png" alt="Ảnh đại diện Nguyễn Nguyễn" draggable="false">
+      <figcaption><span class="mono">Fig. 01</span><span class="mono">Nguyễn Nguyễn</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block" id="fit">
+  <div class="wrap">
+    <div class="head">
+      <div class="mono">01 / Năng lực</div>
+      <div>
+        <h2>Đúng với yêu cầu của một website vật liệu công nghiệp</h2>
+        <p>Keo, vật liệu cho ngành điện tử là sản phẩm kỹ thuật, người mua là kỹ sư và bộ phận mua hàng. Giao diện cần đáng tin trước, đẹp sau.</p>
+      </div>
+    </div>
+    <div class="spec">
+      <div class="row">
+        <div class="mono">Phong cách</div>
+        <h3>Hiện đại, technical / industrial</h3>
+        <p>Lưới rõ, typography kỹ thuật, bảng màu trung tính kèm một màu nhấn. Không gradient loè loẹt, không hiệu ứng thừa.</p>
+      </div>
+      <div class="row">
+        <div class="mono">Hình ảnh</div>
+        <h3>Ưu tiên photorealistic</h3>
+        <p>Dùng ảnh thật của dây chuyền, bo mạch, quy trình dán/phủ keo; chỉnh màu đồng bộ. Tránh cảm giác AI hay render 3D.</p>
+      </div>
+      <div class="row">
+        <div class="mono">B2B</div>
+        <h3>Nội dung để bán hàng</h3>
+        <p>Trang sản phẩm theo ứng dụng (SMT, potting, conformal coating, thermal…), bảng thông số, tải TDS/SDS, form yêu cầu mẫu &amp; báo giá.</p>
+      </div>
+      <div class="row">
+        <div class="mono">Kinh nghiệm</div>
+        <h3>Công nghiệp, điện tử, công nghệ</h3>
+        <p>Đã dựng lại giao diện nhiều website doanh nghiệp công nghiệp, năng lượng, chiếu sáng – điện và công nghệ (xem bên dưới).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="process">
+  <div class="wrap">
+    <div class="head">
+      <div class="mono">02 / Quy trình</div>
+      <div>
+        <h2>Bốn bước, mỗi bước có đầu ra để duyệt</h2>
+        <p>Bên anh/chị duyệt từng mốc trước khi sang bước tiếp theo.</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div><span class="mono">Step 01</span><h3>Khảo sát</h3><p>Sản phẩm, khách hàng mục tiêu, đối thủ, nội dung hiện có.</p></div>
+      <div><span class="mono">Step 02</span><h3>Sitemap &amp; wireframe</h3><p>Cấu trúc danh mục, luồng từ tìm sản phẩm tới gửi yêu cầu báo giá.</p></div>
+      <div><span class="mono">Step 03</span><h3>Thiết kế UI</h3><p>Moodboard, style guide, giao diện desktop và mobile cho các trang chính.</p></div>
+      <div><span class="mono">Step 04</span><h3>Bàn giao</h3><p>File thiết kế, component, hướng dẫn ảnh và hỗ trợ đội lập trình.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="work">
+  <div class="wrap">
+    <div class="head">
+      <div class="mono">03 / Website</div>
+      <div>
+        <h2>Website đã dựng lại</h2>
+        <p>Bấm vào một website để xem trực tiếp. Mặc định hiển thị nhóm gần với ngành công nghiệp – công nghệ.</p>
+      </div>
+    </div>
+    <div class="filters" id="filters"></div>
+    <p class="note">Bản dựng lại (clone) giao diện từ website thực tế, chỉ để xem. Thương hiệu, hình ảnh và nội dung thuộc về chủ sở hữu từng website.</p>
+    <p class="note" id="offline" hidden style="color:var(--accent)">Bản xem trực tiếp đang tạm offline. Gọi 0349206916 để được mở xem.</p>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" hidden>Đang tải danh sách…</div>
+  </div>
+</section>
+
+<section class="block" id="contact">
+  <div class="wrap contact">
+    <div class="mono">04 / Liên hệ</div>
+    <div>
+      <h2>Trao đổi về website mới của anh/chị</h2>
+      <p class="desc" style="color:var(--muted);margin:0">Gửi giúp mình danh mục sản phẩm và website hiện tại, mình sẽ phản hồi hướng thiết kế và báo giá.</p>
+      <dl id="contactList"></dl>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span class="mono">© Nguyễn Nguyễn</span><span class="mono">Web / UI Design · Industrial B2B</span></div>
+</footer>
+
+<div class="viewer" id="viewer" hidden>
+  <div class="bar">
+    <b id="vName"></b><span class="mono" id="vSite"></span>
+    <button class="btn ghost x" id="vClose" type="button">Đóng ✕</button>
+  </div>
+  <iframe id="vFrame" title="Xem website" sandbox="allow-scripts allow-same-origin"></iframe>
+</div>
+
+<script>
+// Điền thông tin liên hệ; mục để trống sẽ không hiển thị.
+const PROFILE = { email: '', phone: '0349206916', zalo: '', location: 'Hà Nội (có thể gặp trực tiếp)' };
+// Nhóm gần ngành của khách (công nghiệp / điện tử / công nghệ) được đưa lên đầu.
+const NEAR = ['Công nghiệp & năng lượng', 'Công nghệ', 'Nhà cửa & xây dựng',
+  'Mua sắm', 'Văn hóa & giải trí', 'Sức khỏe & làm đẹp', 'Giáo dục', 'Ăn uống', 'Tài chính'];
+const NEAR_KEY = '__near';
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const $ = id => document.getElementById(id);
+let VIEW = `${location.protocol}//${location.hostname}:${+location.port + 1}`;
+let items = [];
+let filter = NEAR_KEY;
+
+function renderContact() {
+  const rows = [
+    ['Email', PROFILE.email && `<a href="mailto:${esc(PROFILE.email)}">${esc(PROFILE.email)}</a>`],
+    ['Điện thoại', PROFILE.phone && `<a href="tel:${esc(PROFILE.phone)}">${esc(PROFILE.phone)}</a>`],
+    ['Zalo', PROFILE.zalo && esc(PROFILE.zalo)],
+    ['Khu vực', PROFILE.location && esc(PROFILE.location)],
+  ].filter(r => r[1]);
+  $('contactList').innerHTML = rows.length
+    ? rows.map(([k, v]) => `<dt class="mono">${k}</dt><dd>${v}</dd>`).join('')
+    : '<dt class="mono">Kênh</dt><dd>Nhắn trực tiếp qua bài tuyển dụng / kênh anh/chị đã liên hệ.</dd>';
+}
+
+function groups() {
+  const order = [...NEAR, ...new Set(items.map(i => i.group))];
+  return [...new Set(order)].filter(g => items.some(i => i.group === g));
+}
+
+function renderFilters() {
+  const near = items.filter(i => NEAR.includes(i.group)).length;
+  const chips = [[NEAR_KEY, 'Gần ngành', near], ['', 'Tất cả', items.length], ...groups().map(g => [g, g, items.filter(i => i.group === g).length])];
+  $('filters').innerHTML = chips.filter(c => c[2]).map(([k, label, n]) =>
+    `<button type="button" class="chip${k === filter ? ' on' : ''}" data-k="${esc(k)}">${esc(label)}<small>${n}</small></button>`).join('');
+}
+
+const fit = new ResizeObserver(es => { for (const e of es) e.target.style.setProperty('--s', e.contentRect.width / 1280); });
+
+function renderGrid() {
+  const shown = items
+    .filter(i => filter === NEAR_KEY ? NEAR.includes(i.group) : !filter || i.group === filter)
+    .sort((a, b) => groups().indexOf(a.group) - groups().indexOf(b.group));
+  $('grid').innerHTML = shown.map(i => `
+    <button type="button" class="card" data-site="${esc(i.site)}">
+      <div class="thumb"><iframe loading="lazy" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin" src="${esc(viewUrl(i))}"></iframe></div>
+      <div class="meta">
+        <div class="t"><h3>${esc(i.name)}</h3>${NEAR.includes(i.group) ? '<span class="tag">Gần ngành</span>' : ''}</div>
+        <span class="mono">${esc(i.field)} · ${esc(i.site)}</span>
+      </div>
+    </button>`).join('');
+  $('grid').querySelectorAll('.thumb').forEach(t => fit.observe(t));
+  $('empty').hidden = shown.length > 0;
+  if (!shown.length) $('empty').textContent = 'Chưa có website trong nhóm này.';
+}
+
+const viewUrl = i => `${VIEW}/${encodeURIComponent(i.site)}/${i.entry}`;
+
+function openViewer(site) {
+  const i = items.find(x => x.site === site);
+  if (!i) return;
+  $('vName').textContent = i.name;
+  $('vSite').textContent = `${i.field} · ${i.site}`;
+  $('vFrame').src = viewUrl(i);
+  $('viewer').hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeViewer() {
+  $('viewer').hidden = true;
+  $('vFrame').src = 'about:blank';
+  document.body.style.overflow = '';
+}
+
+$('filters').addEventListener('click', e => {
+  const b = e.target.closest('.chip');
+  if (!b) return;
+  filter = b.dataset.k;
+  renderFilters();
+  renderGrid();
+});
+$('grid').addEventListener('click', e => { const c = e.target.closest('.card'); if (c) openViewer(c.dataset.site); });
+$('vClose').addEventListener('click', closeViewer);
+$('viewer').addEventListener('click', e => { if (e.target.id === 'viewer') closeViewer(); });
+
+// Chỉ để xem: chặn chuột phải, bôi đen, kéo ảnh, lưu/in/xem nguồn.
+for (const t of ['contextmenu', 'selectstart', 'dragstart', 'copy', 'cut']) addEventListener(t, e => e.preventDefault(), true);
+addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('viewer').hidden) return closeViewer();
+  const k = e.key.toLowerCase();
+  if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && (['s', 'u', 'p', 'c'].includes(k) || (e.shiftKey && ['i', 'j', 'c'].includes(k))))) e.preventDefault();
+}, true);
+
+renderContact();
+$('empty').hidden = false;
+// Bản deploy tĩnh (Vercel) có sẵn portfolio.json; chạy bằng server.mjs thì lấy qua API.
+const loadData = () => fetch('portfolio.json').then(r => { if (!r.ok) throw new Error(); return r.json(); })
+  .catch(() => Promise.all([fetch('/api/config').then(r => r.json()).catch(() => ({})), fetch('/api/portfolio').then(r => r.json())])
+    .then(([c, list]) => ({ viewBase: c.viewBase || (c.viewPort && `${location.protocol}//${location.hostname}:${c.viewPort}`), items: list })));
+loadData().then(d => {
+    if (d.viewBase) VIEW = d.viewBase;
+    items = d.items;
+    // Bản clone chạy từ máy cá nhân qua tunnel; máy tắt thì tên miền tunnel không còn phân giải được.
+    fetch(`${VIEW}/`, { mode: 'no-cors' }).catch(() => { $('offline').hidden = false; });
+    $('statSites').textContent = items.length;
+    $('statPages').textContent = items.reduce((s, i) => s + (i.pages || 1), 0);
+    $('statGroups').textContent = new Set(items.map(i => i.group)).size;
+    if (!items.some(i => NEAR.includes(i.group))) filter = '';
+    renderFilters();
+    renderGrid();
+  }).catch(() => { $('empty').textContent = 'Không tải được danh sách website.'; });
+</script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+[
+  {
+    "group": "Ăn uống",
+    "field": "Nhà hàng & buffet",
+    "url": "https://hoangyengroup.com/",
+    "name": "Hoàng Yến Group"
+  },
+  {
+    "group": "Ăn uống",
+    "field": "Tiệm bánh",
+    "url": "https://abcbakery.com.vn/",
+    "name": "ABC Bakery"
+  },
+  {
+    "group": "Ăn uống",
+    "field": "Trà & đồ uống",
+    "url": "https://phela.vn/",
+    "name": "Phê La"
+  },
+  {
+    "group": "Ăn uống",
+    "field": "Công thức nấu ăn",
+    "url": "https://cooky.vn/",
+    "name": "Cooky"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Nội thất",
+    "url": "https://nhaxinh.com/",
+    "name": "Nhà Xinh"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Đồ gia dụng",
+    "url": "https://sunhouse.com.vn/",
+    "name": "Sunhouse"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Mẹ & bé",
+    "url": "https://concung.com/",
+    "name": "Con Cưng"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Đồ chơi",
+    "url": "https://www.mykingdom.com.vn/",
+    "name": "MyKingdom"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Sách & văn phòng phẩm",
+    "url": "https://nhanam.vn/",
+    "name": "Nhã Nam"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Thú cưng",
+    "url": "https://paddy.vn/",
+    "name": "Paddy"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Đồ thể thao",
+    "url": "https://supersports.com.vn/",
+    "name": "Supersports"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Hoa & quà tặng",
+    "url": "https://www.flowercorner.vn/",
+    "name": "FlowerCorner"
+  },
+  {
+    "group": "Mua sắm",
+    "field": "Mỹ phẩm",
+    "url": "https://cocolux.com/",
+    "name": "Cocolux"
+  },
+  {
+    "group": "Sức khỏe & làm đẹp",
+    "field": "Nha khoa",
+    "url": "https://nhakhoaparis.vn/",
+    "name": "Nha Khoa Paris"
+  },
+  {
+    "group": "Sức khỏe & làm đẹp",
+    "field": "Bệnh viện tư",
+    "url": "https://tamanhhospital.vn/",
+    "name": "Bệnh viện Tâm Anh"
+  },
+  {
+    "group": "Sức khỏe & làm đẹp",
+    "field": "Dược phẩm",
+    "url": "https://dhgpharma.com.vn/vi",
+    "name": "DHG Pharma"
+  },
+  {
+    "group": "Sức khỏe & làm đẹp",
+    "field": "Gym & fitness",
+    "url": "https://cali.vn/",
+    "name": "California Fitness & Yoga"
+  },
+  {
+    "group": "Sức khỏe & làm đẹp",
+    "field": "Thẩm mỹ & spa",
+    "url": "https://seoulspa.vn/",
+    "name": "SeoulSpa"
+  },
+  {
+    "group": "Giáo dục",
+    "field": "Ngoại ngữ",
+    "url": "https://apollo.edu.vn/",
+    "name": "Apollo English"
+  },
+  {
+    "group": "Giáo dục",
+    "field": "Đại học",
+    "url": "https://ueh.edu.vn/",
+    "name": "Đại học Kinh tế TP.HCM"
+  },
+  {
+    "group": "Giáo dục",
+    "field": "Edtech trẻ em",
+    "url": "https://monkey.edu.vn/",
+    "name": "Monkey"
+  },
+  {
+    "group": "Giáo dục",
+    "field": "Đào tạo lập trình",
+    "url": "https://mindx.edu.vn/",
+    "name": "MindX"
+  },
+  {
+    "group": "Giáo dục",
+    "field": "Khóa học online",
+    "url": "https://unica.vn/",
+    "name": "Unica"
+  },
+  {
+    "group": "Tài chính",
+    "field": "Bảo hiểm",
+    "url": "https://baoviet.com.vn/vi",
+    "name": "Bảo Việt"
+  },
+  {
+    "group": "Tài chính",
+    "field": "Chứng khoán",
+    "url": "https://www.ssi.com.vn/",
+    "name": "Chứng khoán SSI"
+  },
+  {
+    "group": "Công nghệ",
+    "field": "Game",
+    "url": "https://www.amanotes.com/",
+    "name": "Amanotes"
+  },
+  {
+    "group": "Công nghệ",
+    "field": "Gia công phần mềm",
+    "url": "https://www.tma.vn/",
+    "name": "TMA Tech Group"
+  },
+  {
+    "group": "Công nghệ",
+    "field": "Trí tuệ nhân tạo",
+    "url": "https://fpt.ai/",
+    "name": "FPT.AI"
+  },
+  {
+    "group": "Công nghệ",
+    "field": "Cloud & hosting",
+    "url": "https://bizflycloud.vn/",
+    "name": "Bizfly Cloud"
+  },
+  {
+    "group": "Công nghệ",
+    "field": "Nhà thông minh",
+    "url": "https://lumi.vn/",
+    "name": "Lumi Smart Home"
+  },
+  {
+    "group": "Nhà cửa & xây dựng",
+    "field": "Vật liệu xây dựng",
+    "url": "https://eurowindow.biz/",
+    "name": "Eurowindow"
+  },
+  {
+    "group": "Nhà cửa & xây dựng",
+    "field": "Kiến trúc",
+    "url": "https://a21studio.com.vn/",
+    "name": "a21studio"
+  },
+  {
+    "group": "Nhà cửa & xây dựng",
+    "field": "Chiếu sáng & thiết bị điện",
+    "url": "https://rangdong.com.vn/",
+    "name": "Rạng Đông"
+  },
+  {
+    "group": "Nhà cửa & xây dựng",
+    "field": "Coworking",
+    "url": "https://dreamplex.co/",
+    "name": "Dreamplex"
+  },
+  {
+    "group": "Du lịch & lưu trú",
+    "field": "Khách sạn & resort",
+    "url": "https://fusionresorts.com/",
+    "name": "Fusion Resorts"
+  },
+  {
+    "group": "Du lịch & lưu trú",
+    "field": "Đặt phòng & vé",
+    "url": "https://www.ivivu.com/",
+    "name": "iVIVU"
+  },
+  {
+    "group": "Du lịch & lưu trú",
+    "field": "Điểm đến địa phương",
+    "url": "https://danangfantasticity.com/",
+    "name": "Danang Fantasticity"
+  },
+  {
+    "group": "Văn hóa & giải trí",
+    "field": "Bảo tàng",
+    "url": "https://baotangphunu.org.vn/",
+    "name": "Bảo tàng Phụ nữ Việt Nam"
+  },
+  {
+    "group": "Văn hóa & giải trí",
+    "field": "Vé sự kiện",
+    "url": "https://ticketbox.vn/",
+    "name": "Ticketbox"
+  },
+  {
+    "group": "Văn hóa & giải trí",
+    "field": "Bóng đá",
+    "url": "https://vpf.vn/",
+    "name": "VPF – V.League"
+  },
+  {
+    "group": "Văn hóa & giải trí",
+    "field": "Nhạc cụ",
+    "url": "https://vietthuong.vn/",
+    "name": "Việt Thương Music"
+  },
+  {
+    "group": "Văn hóa & giải trí",
+    "field": "Tiệc cưới & sự kiện",
+    "url": "https://whitepalace.com.vn/",
+    "name": "White Palace"
+  },
+  {
+    "group": "Văn hóa & giải trí",
+    "field": "Studio ảnh cưới",
+    "url": "https://tonywedding.vn/",
+    "name": "Tony Wedding"
+  },
+  {
+    "group": "Truyền thông",
+    "field": "Tạp chí lifestyle",
+    "url": "https://vietcetera.com/",
+    "name": "Vietcetera"
+  },
+  {
+    "group": "Truyền thông",
+    "field": "Báo kinh tế",
+    "url": "https://cafef.vn/",
+    "name": "CafeF"
+  },
+  {
+    "group": "Công nghiệp & năng lượng",
+    "field": "Năng lượng",
+    "url": "https://petrolimex.com.vn/",
+    "name": "Petrolimex"
+  },
+  {
+    "group": "Công nghiệp & năng lượng",
+    "field": "Thủy sản",
+    "url": "https://minhphu.com/",
+    "name": "Thủy sản Minh Phú"
+  },
+  {
+    "group": "Công nghiệp & năng lượng",
+    "field": "Logistics",
+    "url": "https://www.gemadept.com.vn/",
+    "name": "Gemadept"
+  },
+  {
+    "group": "Xã hội",
+    "field": "Tổ chức phi lợi nhuận",
+    "url": "https://www.bluedragon.org/",
+    "name": "Blue Dragon"
+  },
+  {
+    "group": "Xã hội",
+    "field": "Agency sáng tạo",
+    "url": "https://colorme.vn/",
+    "name": "ColorMe"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Tử vi",
+    "url": "https://tuvi.vn/",
+    "name": "TuVi.vn"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Lịch vạn niên",
+    "url": "https://lichvannien365.com/",
+    "name": "Lịch Vạn Niên 365"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Xem ngày tốt",
+    "url": "https://lichngaytot.com/",
+    "name": "Lịch Ngày Tốt"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Tarot",
+    "url": "https://tarot.vn/",
+    "name": "Tarot.vn"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "12 con giáp",
+    "url": "https://12congiap.com/",
+    "name": "12 Con Giáp"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Thần số học",
+    "url": "https://tracuuthansohoc.com/",
+    "name": "Tra Cứu Thần Số Học"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Phong thủy",
+    "url": "https://phongthuy.vn/",
+    "name": "PhongThuy.vn"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Cung hoàng đạo",
+    "url": "https://cunghoangdao.org/vi",
+    "name": "Cung Hoàng Đạo"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Văn khấn & tâm linh",
+    "url": "https://vankhan.vn/",
+    "name": "Văn Khấn"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Giải mộng",
+    "url": "https://giaimong.com/",
+    "name": "Giải Mộng"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Tử vi & phong thủy",
+    "url": "https://thayungkhiem.vn/",
+    "name": "Thầy Ưng Khiêm"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Phong thủy",
+    "url": "https://thayhuyenphongthuy.com/",
+    "name": "Thầy Huyến Phong Thủy"
+  },
+  {
+    "group": "Tâm linh & bói toán",
+    "field": "Kỳ môn & bát môn độn giáp",
+    "url": "https://www.kymonai.vn/",
+    "name": "Kỳ Môn AI"
+  }
+]

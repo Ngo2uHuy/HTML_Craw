@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CrawCode – Tải ảnh & icon</title>
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="images.css">
+</head>
+<body>
+<main class="wide">
+  <h1>CrawCode</h1>
+  <p class="sub">Clone giao diện website hoặc chuyển thiết kế Figma thành HTML + CSS + JS.</p>
+
+  <nav class="apptabs">
+    <a class="apptab" href="/">Clone website</a>
+    <a class="apptab" href="/#figma">Từ Figma</a>
+    <a class="apptab" href="images.html" aria-current="page">Ảnh &amp; icon</a>
+    <a class="apptab" href="gallery.html">Thư viện</a>
+  </nav>
+
+  <section class="panel">
+    <form id="scanForm" class="urlbar">
+      <input id="url" type="text" placeholder="https://example.com" required>
+      <button id="scanBtn" class="primary" type="submit">Quét</button>
+      <button id="cancelBtn" class="danger" type="button" hidden>Huỷ</button>
+    </form>
+    <details class="opts">
+      <summary>Tuỳ chọn crawl</summary>
+      <div class="row">
+        <label>Độ sâu
+          <select id="depth">
+            <option value="0">Chỉ trang này</option>
+            <option value="1">+ các trang liên kết (1 tầng)</option>
+            <option value="2">2 tầng</option>
+            <option value="3">3 tầng</option>
+          </select>
+        </label>
+        <label>Tối đa số trang <input id="maxPages" type="number" min="1" max="500" value="30"></label>
+        <label>Số luồng tải <input id="concurrency" type="number" min="1" max="32" value="8"></label>
+        <label><input id="sameHost" type="checkbox" checked> Chỉ trong cùng domain</label>
+      </div>
+    </details>
+    <div id="progress" hidden><div class="bar"><i></i></div><span></span></div>
+    <div id="error" class="err" hidden></div>
+  </section>
+
+  <section id="filters" class="panel" hidden>
+    <div class="row">
+      <label>Chất lượng
+        <select id="quality">
+          <option value="max">Cao nhất (ảnh gốc)</option>
+          <option value="medium">Trung bình (~800px)</option>
+          <option value="min">Thấp (thumbnail)</option>
+          <option value="all">Tất cả biến thể</option>
+        </select>
+      </label>
+      <label>Rộng ≥ <input id="minW" type="number" min="0" value="0"> px</label>
+      <label>Cao ≥ <input id="minH" type="number" min="0" value="0"> px</label>
+      <label>Dung lượng ≥ <input id="minKB" type="number" min="0" value="0"> KB</label>
+      <label>Icon khi ≤ <input id="iconMax" type="number" min="0" value="128"> px</label>
+      <input id="search" type="search" placeholder="Lọc theo tên / URL">
+    </div>
+    <div class="row">
+      <div class="seg" id="kindTabs">
+        <button data-kind="all" class="on">Tất cả</button>
+        <button data-kind="image">Ảnh</button>
+        <button data-kind="icon">Icon</button>
+      </div>
+      <div id="formats"></div>
+    </div>
+    <div class="row toolbar">
+      <span id="summary"></span>
+      <button id="selAll" type="button">Chọn tất cả</button>
+      <button id="selNone" type="button">Bỏ chọn</button>
+      <button id="zipBtn" type="button" class="primary">Tải ZIP</button>
+      <button id="saveBtn" type="button">Lưu vào thư mục</button>
+    </div>
+  </section>
+
+  <div id="grid"></div>
+</main>
+<script src="images.js"></script>
+</body>
+</html>

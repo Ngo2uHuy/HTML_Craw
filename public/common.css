@@ -1,0 +1,66 @@
+/* Style dùng chung cho mọi trang CrawCode. */
+:root {
+  --bg: #f6f7f9; --panel: #fff; --text: #1d2330; --muted: #6b7385; --line: #e3e6ec;
+  --accent: #2f6fed; --accent-text: #fff; --accent-weak: #e8f0fe; --sel: #dbe7ff; --checker: #eceef2;
+  --ok: #1a8f5a; --err: #d23c3c; --warn: #b7791f;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12151b; --panel: #1b1f27; --text: #e6e9ef; --muted: #8d95a7; --line: #2a303b;
+    --accent: #5b8ef5; --accent-weak: #1e2a44; --sel: #1f3157; --checker: #262a33;
+    --ok: #3cc488; --err: #f06b6b; --warn: #e0a84a;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; }
+main.wide { max-width: 1280px; }
+h1 { font-size: 24px; margin: 0 0 4px; }
+h2 { font-size: 16px; margin: 0 0 12px; }
+.sub { color: var(--muted); margin: 0 0 24px; }
+a { color: var(--accent); }
+
+/* Tab điều hướng giữa các chức năng */
+.apptabs { display: flex; gap: 4px; margin-bottom: -1px; overflow-x: auto; }
+.apptab {
+  padding: 10px 16px; border: 1px solid transparent; border-bottom: 0; border-radius: 10px 10px 0 0;
+  background: none; color: var(--muted); font: inherit; font-weight: 600; text-decoration: none; white-space: nowrap; cursor: pointer;
+}
+.apptab:hover { color: var(--text); }
+.apptab[aria-selected=true], .apptab[aria-current=page] { background: var(--panel); border-color: var(--line); color: var(--text); }
+.apptabs + .panel { border-top-left-radius: 0; }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.urlbar { display: flex; gap: 8px; }
+.urlbar input { flex: 1; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+
+input[type=text], input[type=password], input[type=search], input[type=number], select, textarea {
+  padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg); color: var(--text); font: inherit;
+}
+input[type=text], input[type=password], textarea { width: 100%; }
+textarea { resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+button, .btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--text);
+  font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; white-space: nowrap;
+}
+button:hover, .btn:hover { border-color: var(--accent); }
+.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.danger { background: var(--err); color: #fff; border-color: var(--err); }
+button.sm, .btn.sm { padding: 5px 12px; font-weight: 500; }
+button:disabled { opacity: .5; cursor: default; }
+
+.err { color: var(--err); margin-top: 8px; min-height: 1.5em; }
+.muted, .empty { color: var(--muted); }
+
+@media (max-width: 560px) {
+  .urlbar { flex-direction: column; }
+  .hide-sm { display: none; }
+}

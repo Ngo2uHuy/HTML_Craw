@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrawCode – Clone website</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  .levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 16px 0; }
+  .level { position: relative; border: 1px solid var(--line); border-radius: 10px; padding: 12px; cursor: pointer; }
+  .level input { position: absolute; opacity: 0; }
+  .level b { display: block; }
+  .level span { color: var(--muted); font-size: 13px; }
+  .level:has(input:checked) { border-color: var(--accent); background: var(--accent-weak); }
+  .custom { display: none; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .custom.show { display: grid; }
+  .custom label { font-size: 13px; color: var(--muted); }
+  .custom input { width: 100%; }
+  .stats { display: flex; gap: 24px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stats div { font-size: 13px; color: var(--muted); }
+  .stats b { display: block; font-size: 22px; color: var(--text); }
+  .status { font-weight: 600; }
+  .status.running { color: var(--accent); } .status.done { color: var(--ok); }
+  .status.error { color: var(--err); } .status.cancelled { color: var(--warn); }
+  .log { height: 240px; overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+         padding: 8px 10px; font: 12px/1.6 ui-monospace, Consolas, monospace; }
+  .log div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .log .e { color: var(--err); }
+  .actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  table { width: 100%; border-collapse: collapse; }
+  td, th { text-align: left; padding: 10px 6px; border-bottom: 1px solid var(--line); }
+  th { font-size: 13px; color: var(--muted); font-weight: 500; }
+  td.num { color: var(--muted); white-space: nowrap; }
+  td.act { text-align: right; white-space: nowrap; }
+  .field { margin-top: 12px; }
+  .field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  .hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+  .ai-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+  .ai-grid select, .ai-grid input { width: 100%; }
+  #figmaForm .levels { margin: 16px 0 4px; }
+  .check { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); margin-top: 8px; }
+  @media (max-width: 560px) {
+    .custom, .ai-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>CrawCode</h1>
+  <p class="sub">Clone giao diện website hoặc chuyển thiết kế Figma thành HTML + CSS + JS.</p>
+
+  <nav class="apptabs" role="tablist">
+    <button class="apptab" type="button" role="tab" data-tab="form" aria-selected="true">Clone website</button>
+    <button class="apptab" type="button" role="tab" data-tab="figmaForm" aria-selected="false">Từ Figma</button>
+    <a class="apptab" href="images.html">Ảnh &amp; icon</a>
+    <a class="apptab" href="gallery.html">Thư viện</a>
+  </nav>
+
+  <form class="panel" id="figmaForm" hidden>
+    <div class="urlbar">
+      <input type="text" id="figmaUrl" placeholder="https://www.figma.com/design/xxxx/Ten-file?node-id=1-2" autocomplete="off" required>
+      <button class="primary" id="figmaGo">Tạo HTML</button>
+    </div>
+    <div class="field">
+      <label for="figmaToken">Figma access token</label>
+      <input type="password" id="figmaToken" placeholder="figd_… (bỏ trống nếu server đã đặt FIGMA_TOKEN)" autocomplete="off">
+      <label class="check"><input type="checkbox" id="rememberToken"> Nhớ token trên trình duyệt này</label>
+    </div>
+
+    <div class="levels">
+      <label class="level"><input type="radio" name="fmode" value="exact" checked>
+        <b>Chính xác theo pixel</b><span>Không cần AI, giống thiết kế 1:1</span></label>
+      <label class="level"><input type="radio" name="fmode" value="ai">
+        <b>Dùng AI</b><span>HTML ngữ nghĩa, responsive, có JS</span></label>
+    </div>
+
+    <div id="aiOpts" hidden>
+      <div class="ai-grid">
+        <div class="field"><label for="aiProvider">Nhà cung cấp</label>
+          <select id="aiProvider">
+            <option value="gemini">Gemini (Google)</option>
+            <option value="claude">Claude (Anthropic)</option>
+            <option value="openai">Codex (OpenAI)</option>
+          </select></div>
+        <div class="field"><label for="aiModel">Model</label>
+          <input type="text" id="aiModel" list="aiModels" autocomplete="off"><datalist id="aiModels"></datalist></div>
+      </div>
+      <div class="field">
+        <label for="aiKey">API key <span id="aiEnvHint"></span></label>
+        <input type="password" id="aiKey" autocomplete="off">
+        <label class="check"><input type="checkbox" id="rememberAiKey"> Nhớ key trên trình duyệt này</label>
+      </div>
+      <div class="field">
+        <label for="aiPrompt">Yêu cầu thêm (tuỳ chọn)</label>
+        <textarea id="aiPrompt" rows="2" placeholder="VD: dùng CSS Grid, thêm menu mobile, đặt tên class theo BEM…"></textarea>
+      </div>
+    </div>
+    <p class="hint">Có <code>node-id</code> → chuyển đúng frame/section/page đó; không có → mọi frame ở page đầu tiên (tối đa 30).
+      Token tạo tại <a href="https://www.figma.com/settings" target="_blank" rel="noopener">Figma → Settings → Security → Personal access tokens</a> (quyền đọc file).</p>
+    <div class="err" id="figmaErr"></div>
+  </form>
+
+  <form class="panel" id="form">
+    <div class="urlbar">
+      <input type="text" id="url" placeholder="https://example.com" autocomplete="off" required>
+      <button class="primary" id="go">Clone</button>
+    </div>
+
+    <div class="levels">
+      <label class="level"><input type="radio" name="level" value="page" checked>
+        <b>Chỉ trang này</b><span>1 trang + CSS/JS/ảnh/font</span></label>
+      <label class="level"><input type="radio" name="level" value="section">
+        <b>Trang + link cấp 1</b><span>Tối đa 10 trang điển hình trong các trang được link trực tiếp</span></label>
+      <label class="level"><input type="radio" name="level" value="site">
+        <b>Cả website</b><span>Quét tất cả trang liên kết trong website, không giới hạn số trang và độ sâu</span></label>
+      <label class="level"><input type="radio" name="level" value="custom">
+        <b>Tuỳ chỉnh</b><span>Tự đặt độ sâu, số trang</span></label>
+    </div>
+
+    <div class="custom" id="custom">
+      <div><label for="depth">Độ sâu link</label><input type="number" id="depth" min="0" max="20" value="2"></div>
+      <div><label for="maxPages">Số trang tối đa</label><input type="number" id="maxPages" min="1" max="10" value="10"></div>
+      <div><label for="concurrency">Tải song song</label><input type="number" id="concurrency" min="1" max="16" value="6"></div>
+    </div>
+    <div class="err" id="err"></div>
+  </form>
+
+  <section class="panel" id="job" hidden>
+    <h2>Tiến độ: <span id="jobSite"></span> — <span class="status" id="jobStatus"></span></h2>
+    <div class="stats">
+      <div><b id="sPages">0</b>trang</div>
+      <div><b id="sAssets">0</b>file</div>
+      <div><b id="sFailed">0</b>lỗi</div>
+    </div>
+    <div class="log" id="log"></div>
+    <div class="actions">
+      <button class="danger" id="cancel" type="button">Dừng</button>
+      <a class="btn primary" id="view" target="_blank" hidden>Xem bản clone</a>
+      <a class="btn" id="zip" hidden>Tải ZIP</a>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Website đã clone</h2>
+    <table>
+      <thead><tr><th>Website</th><th class="hide-sm">Trang</th><th class="hide-sm">Dung lượng</th><th></th></tr></thead>
+      <tbody id="sites"></tbody>
+    </table>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const STATUS = { running: 'Đang clone…', done: 'Hoàn tất', cancelled: 'Đã dừng', error: 'Lỗi' };
+let current = null;
+let es = null;
+let VIEW = `${location.protocol}//${location.hostname}:${+location.port + 1}`;
+fetch('/api/config').then(r => r.json()).then(c => { VIEW = c.viewBase || `${location.protocol}//${location.hostname}:${c.viewPort}`; loadSites(); });
+
+const tabs = document.querySelectorAll('.apptab[data-tab]');
+const showTab = t => tabs.forEach(x => {
+  x.setAttribute('aria-selected', x === t);
+  $(x.dataset.tab).hidden = x !== t;
+});
+tabs.forEach(t => t.addEventListener('click', () => showTab(t)));
+if (location.hash === '#figma') showTab(tabs[1]);
+
+const store = {
+  get: k => { try { return localStorage.getItem(k) || ''; } catch { return ''; } },
+  set: (k, v) => { try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch {} },
+};
+$('figmaToken').value = store.get('crawcode.figmaToken');
+$('rememberToken').checked = !!$('figmaToken').value;
+
+// ---- AI (Gemini / Claude / Codex) ----
+const fmode = () => document.querySelector('input[name=fmode]:checked').value;
+
+document.querySelectorAll('input[name=fmode]').forEach(r => r.addEventListener('change', () => {
+  $('aiOpts').hidden = fmode() !== 'ai';
+  store.set('crawcode.fmode', fmode());
+  if (fmode() === 'ai') loadAiProvider();
+}));
+
+let modelsReq = 0;
+function loadAiProvider() {
+  const prov = $('aiProvider').value;
+  store.set('crawcode.aiProvider', prov);
+  const savedKey = store.get(`crawcode.aiKey.${prov}`);
+  $('aiKey').value = savedKey;
+  $('rememberAiKey').checked = !!savedKey;
+  $('aiModel').value = store.get(`crawcode.aiModel.${prov}`);
+  $('aiModels').innerHTML = '';
+  refreshModels();
+}
+
+async function refreshModels() {
+  const prov = $('aiProvider').value;
+  const req = ++modelsReq;
+  const res = await fetch('/api/ai/models', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ provider: prov, key: $('aiKey').value.trim() }),
+  }).then(r => r.json()).catch(() => null);
+  if (!res || req !== modelsReq) return;
+  $('aiModel').placeholder = res.default;
+  $('aiKey').placeholder = res.hasEnvKey ? `Đang dùng ${res.env} của server` : 'Dán API key';
+  $('aiEnvHint').textContent = res.error ? `— ${res.error}` : '';
+  $('aiModels').innerHTML = res.models.map(m => `<option value="${esc(m)}">`).join('');
+}
+
+$('aiProvider').addEventListener('change', loadAiProvider);
+$('aiKey').addEventListener('change', refreshModels);
+
+$('aiProvider').value = store.get('crawcode.aiProvider') || 'gemini';
+if (store.get('crawcode.fmode') === 'ai') {
+  document.querySelector('input[name=fmode][value=ai]').checked = true;
+  $('aiOpts').hidden = false;
+  loadAiProvider();
+}
+
+$('figmaForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('figmaErr').textContent = '';
+  const token = $('figmaToken').value.trim();
+  store.set('crawcode.figmaToken', $('rememberToken').checked ? token : '');
+  const body = { url: $('figmaUrl').value.trim(), token, mode: fmode() };
+  if (body.mode === 'ai') {
+    const prov = $('aiProvider').value;
+    Object.assign(body, {
+      provider: prov, model: $('aiModel').value.trim(), aiKey: $('aiKey').value.trim(), prompt: $('aiPrompt').value.trim(),
+    });
+    store.set(`crawcode.aiKey.${prov}`, $('rememberAiKey').checked ? body.aiKey : '');
+    store.set(`crawcode.aiModel.${prov}`, body.model);
+  }
+  await submitJob('/api/figma', body, $('figmaErr'));
+});
+
+async function submitJob(endpoint, body, errEl) {
+  $('go').disabled = $('figmaGo').disabled = true;
+  try {
+    const res = await fetch(endpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || res.statusText);
+    watch(data.id);
+  } catch (err) {
+    errEl.textContent = err.message;
+    $('go').disabled = $('figmaGo').disabled = false;
+  }
+}
+
+const fmtSize = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.ceil(n / 1024) + ' KB';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+document.querySelectorAll('input[name=level]').forEach(r =>
+  r.addEventListener('change', () => $('custom').classList.toggle('show', r.value === 'custom' && r.checked)));
+
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('err').textContent = '';
+  const level = document.querySelector('input[name=level]:checked').value;
+  const body = { url: $('url').value.trim(), level, concurrency: +$('concurrency').value };
+  if (level === 'custom') Object.assign(body, { depth: +$('depth').value, maxPages: +$('maxPages').value });
+  await submitJob('/api/clone', body, $('err'));
+});
+
+$('cancel').addEventListener('click', () => current && fetch(`/api/jobs/${current.id}/cancel`, { method: 'POST' }));
+
+function addLog(m) {
+  if (m.type !== 'page' && m.type !== 'error') return;
+  const log = $('log');
+  const div = document.createElement('div');
+  div.className = m.type === 'error' ? 'e' : '';
+  div.textContent = m.type === 'error' ? `✗ ${m.url} (${m.message})` : `→ ${m.url}`;
+  log.appendChild(div);
+  while (log.childElementCount > 300) log.firstChild.remove();
+  log.scrollTop = log.scrollHeight;
+}
+
+function render(job) {
+  current = job;
+  $('job').hidden = false;
+  $('jobSite').textContent = job.site;
+  $('jobStatus').textContent = STATUS[job.status];
+  $('jobStatus').className = 'status ' + job.status;
+  setStats(job.stats);
+  const running = job.status === 'running';
+  $('cancel').hidden = !running;
+  $('go').disabled = $('figmaGo').disabled = running;
+  $('view').hidden = $('zip').hidden = running || !job.entry;
+  if (job.entry) {
+    $('view').href = `${VIEW}/${job.site}/${job.entry}`;
+    $('zip').href = `/download/${job.site}.zip`;
+  }
+}
+
+function setStats(s) {
+  $('sPages').textContent = s.pages;
+  $('sAssets').textContent = s.assets;
+  $('sFailed').textContent = s.failed;
+}
+
+function watch(id) {
+  es?.close();
+  $('log').textContent = '';
+  try { localStorage.setItem('crawcode.job', id); } catch {}
+  es = new EventSource(`/api/jobs/${id}/events`);
+  es.onmessage = ev => {
+    const m = JSON.parse(ev.data);
+    if (m.type === 'init') { render(m.job); m.log.forEach(addLog); }
+    else if (m.type === 'end') { render(m.job); es.close(); loadSites(); }
+    else { setStats(m.stats); addLog(m); }
+  };
+  es.onerror = () => { if (current?.status !== 'running') es.close(); };
+}
+
+async function loadSites() {
+  const sites = await (await fetch('/api/sites')).json();
+  $('sites').innerHTML = sites.length ? sites.map(s => `
+    <tr>
+      <td><b>${esc(s.name)}</b>${s.running ? ' <span class="status running">(đang clone)</span>' : ''}</td>
+      <td class="num hide-sm">${s.pages}</td>
+      <td class="num hide-sm">${fmtSize(s.size)}</td>
+      <td class="act">
+        <a class="btn sm" href="${VIEW}/${encodeURIComponent(s.name)}/" target="_blank">Xem</a>
+        <a class="btn sm" href="/download/${encodeURIComponent(s.name)}.zip">ZIP</a>
+        <button type="button" class="danger sm" data-delete-site="${esc(s.name)}" ${s.running ? 'disabled' : ''}>Xóa</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="4" class="empty">Chưa có website nào.</td></tr>';
+}
+
+$('sites').addEventListener('click', async event => {
+  const button = event.target.closest('button[data-delete-site]');
+  if (!button || button.disabled) return;
+  const site = button.dataset.deleteSite;
+  if (!confirm(`Xóa website "${site}" và toàn bộ file đã tải? Thao tác này không thể hoàn tác.`)) return;
+  button.disabled = true;
+  button.textContent = 'Đang xóa…';
+  try {
+    const response = await fetch(`/api/sites/${encodeURIComponent(site)}`, { method: 'DELETE' });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Không xóa được website');
+    if (current?.site === site) {
+      $('view').hidden = $('zip').hidden = true;
+    }
+    await loadSites();
+  } catch (error) {
+    alert(error.message);
+    button.disabled = false;
+    button.textContent = 'Xóa';
+  }
+});
+
+try {
+  const last = localStorage.getItem('crawcode.job');
+  if (last) fetch(`/api/jobs/${last}`).then(r => r.ok && watch(last));
+} catch {}
+</script>
+</body>
+</html>
